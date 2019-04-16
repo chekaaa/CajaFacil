@@ -9,6 +9,7 @@
         target="_blank"
         rel="noopener"
       >vue-cli documentation</a>.
+      <br>
     </p>
     <h3>Installed CLI Plugins</h3>
     <ul>
