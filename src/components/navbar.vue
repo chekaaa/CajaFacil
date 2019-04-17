@@ -32,6 +32,12 @@ li {
   margin: 0.3em 0.5em;
   text-align: center;
   background-color: #9d9e9e;
+  cursor: pointer;
+  box-shadow: 0px 4px 6px 2px rgb(133, 133, 133);
+}
+
+li:hover {
+  background-color: #abadad;
 }
 </style>
 
