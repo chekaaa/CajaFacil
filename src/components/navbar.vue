@@ -1,8 +1,12 @@
 <template>
   <div class="navbar">
     <ul>
-      <li>Caja</li>
-      <li>Historial de ventas</li>
+      <li>
+        <a v-on:click="GetLurem">Caja</a>
+      </li>
+      <li>
+        <a v-on:click="createdb">Historial de ventas</a>
+      </li>
       <li>Inventario</li>
     </ul>
   </div>
@@ -10,7 +14,23 @@
 
 <script>
 export default {
-  name: "navbar"
+  name: "navbar",
+  methods: {
+    createdb: function(event) {
+      this.$ipc.send("onCreatedb");
+    },
+    GetLurem: function(event) {
+      this.$ipc.send("getLorem");
+    },
+    SetListeners: function() {
+      this.$ipc.on("loremRows", (event, arg) => {
+        console.log("Recived the " + arg[3].info);
+      });
+    }
+  },
+  created() {
+    this.SetListeners();
+  }
 };
 </script>
 
