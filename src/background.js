@@ -21,7 +21,7 @@ function createWindow() {
     width: 800,
     height: 600,
     minWidth: 600,
-    minHeight: 400
+    minHeight: 600
   });
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -41,7 +41,7 @@ function createWindow() {
 
 //Sql stuff
 
-//import { CreateDatabase, GetLurem } from "./database/database.js";
+import { CreateDatabase } from "./database/database.js";
 
 //Testin send and recive IPC between VUE and electron using the example database
 

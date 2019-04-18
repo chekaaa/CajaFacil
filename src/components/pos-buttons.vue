@@ -37,6 +37,7 @@ li {
   flex-direction: column;
   text-align: center;
   box-shadow: none;
+  font-size: 3vw;
 
   border: 4px solid black;
 }
