@@ -17,7 +17,12 @@ let win;
 protocol.registerStandardSchemes(["app"], { secure: true });
 function createWindow() {
   // Create the browser window.
-  win = new BrowserWindow({ width: 800, height: 600 });
+  win = new BrowserWindow({
+    width: 800,
+    height: 600,
+    minWidth: 600,
+    minHeight: 400
+  });
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
@@ -36,16 +41,9 @@ function createWindow() {
 
 //Sql stuff
 
-import { CreateDatabase, GetLurem } from "./database/database.js";
+//import { CreateDatabase, GetLurem } from "./database/database.js";
 
 //Testin send and recive IPC between VUE and electron using the example database
-ipcMain.on("onCreatedb", function(event) {
-  CreateDatabase();
-});
-
-ipcMain.on("getLorem", function(event) {
-  GetLurem(event);
-});
 
 // Quit when all windows are closed.
 app.on("window-all-closed", () => {

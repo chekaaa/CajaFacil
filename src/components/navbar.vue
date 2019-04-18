@@ -2,42 +2,33 @@
   <div class="navbar">
     <ul>
       <li>
-        <a v-on:click="GetLurem">Caja</a>
+        <router-link class="router-link" to="POS">Caja</router-link>
       </li>
       <li>
-        <a v-on:click="createdb">Historial de ventas</a>
+        <router-link class="router-link" to="Sales-history">Historial de ventas</router-link>
       </li>
-      <li>Inventario</li>
+      <li>
+        <router-link class="router-link" to="Inventory">Inventario</router-link>
+      </li>
     </ul>
   </div>
 </template>
 
 <script>
 export default {
-  name: "navbar",
-  methods: {
-    createdb: function(event) {
-      this.$ipc.send("onCreatedb");
-    },
-    GetLurem: function(event) {
-      this.$ipc.send("getLorem");
-    },
-    SetListeners: function() {
-      this.$ipc.on("loremRows", (event, arg) => {
-        console.log("Recived the " + arg[3].info);
-      });
-    }
-  },
-  created() {
-    this.SetListeners();
-  }
+  name: "navbar"
 };
 </script>
 
-<style scope>
+<style>
 .navbar {
   background-color: #bfc0c0;
   font-size: 1.7em;
+}
+
+.router-link {
+  text-decoration: none;
+  color: inherit;
 }
 
 ul {

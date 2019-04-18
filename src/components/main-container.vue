@@ -1,5 +1,7 @@
 <template>
-  <div class="main-container"></div>
+  <div class="main-container">
+    <router-view/>
+  </div>
 </template>
 
 <script>
@@ -15,9 +17,10 @@ export default {
 
 <style scope>
 .main-container {
-  margin: 5% 10%;
+  margin: 5% 4%;
   flex-basis: 90%;
   flex-grow: 1;
-  background-color: white;
+  display: flex;
+  background-color: #dedede;
 }
 </style>

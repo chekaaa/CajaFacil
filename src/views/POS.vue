@@ -1,19 +1,28 @@
 <template>
   <div class="container">
-    <navbar/>
+    <posDisplay/>
+    <posButtons/>
   </div>
 </template>
 
 <script>
-import navbar from "@/components/navbar.vue";
-import mainContainer from "@/components/main-container.vue";
+import posDisplay from "@/components/pos-display.vue";
+import posButtons from "@/components/pos-buttons.vue";
 
 export default {
   name: "POS",
   components: {
-    navbar,
-    mainContainer
+    posDisplay,
+    posButtons
   }
 };
 </script>
+
+<style scoped>
+.container {
+  flex-grow: 1;
+  display: flex;
+}
+</style>
+
 
