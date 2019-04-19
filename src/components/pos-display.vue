@@ -8,30 +8,26 @@
           <th class="col3">Cantidad</th>
           <th class="col4">Subtotal</th>
         </tr>
-        <tr>
-          <td>{{codigo}}</td>
-          <td>Pilas</td>
-          <td>10</td>
-          <td>$5000</td>
-        </tr>
-        <tr>
-          <td>133</td>
-          <td>Super 8</td>
-          <td>1</td>
-          <td>1</td>
+        <tr v-for="product in productList" :key="product.id_prod">
+          <td>{{product.code}}</td>
+          <td>{{product.name}}</td>
+          <td>{{product.quantity}}</td>
+          <td>${{product.subtotal}}</td>
         </tr>
       </table>
     </div>
     <div class="total-container">
       <h2>Total:</h2>
       <div class="total-output">
-        <h3>$325325</h3>
+        <h3>${{total}}</h3>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { ipcRenderer } from "electron";
+
 export default {
   name: "pos-display",
   data() {
@@ -39,15 +35,72 @@ export default {
       codigo: "1234"
     };
   },
+  data() {
+    return {
+      productList: [],
+      total: 0
+    };
+  },
   methods: {
     onPaste(evt) {
       console.log("on paste", evt);
+    },
+    requestProductByCode: function(e) {
+      let pastedData = e.clipboardData.getData("text");
+      console.log("Pasted length: " + pastedData.length);
+      if (pastedData !== "undefined" && pastedData.length === 13) {
+        ipcRenderer.send("getProductByCode", pastedData);
+      } else {
+        console.debug(
+          "Invalid code , It must be a 13 long digit with only numbers"
+        );
+      }
+    },
+    cancelSale: function() {
+      this.productList = [];
+    },
+    onProductRecived: function(event, arg) {
+      if (arg != null) {
+        let objIndex = this.productList.findIndex(
+          obj => obj.id === arg.id_prod
+        );
+        console.log("ObjIndex: " + objIndex);
+        if (objIndex !== -1) {
+          this.productList[objIndex].quantity++;
+          this.productList[objIndex].subtotal =
+            this.productList[objIndex].quantity * arg.precio_prod;
+        } else {
+          this.productList.push({
+            id: arg.id_prod,
+            code: arg.cod_ucc14,
+            name: arg.nombre_prod,
+            quantity: 1,
+            subtotal: arg.precio_prod
+          });
+        }
+
+        //calculate new total
+        this.calculateTotal();
+      } else {
+        console.log("Produc not found");
+      }
+    },
+    calculateTotal: function() {
+      let tempTotal = 0;
+      this.productList.forEach(product => {
+        tempTotal += product.subtotal;
+      });
+      this.total = tempTotal;
     }
   },
   mounted() {
-    window.addEventListener("paste", function(e) {
-      console.log(e.clipboardData.getData("text"));
-    });
+    window.addEventListener("paste", this.requestProductByCode);
+
+    ipcRenderer.on("productByCode", this.onProductRecived);
+  },
+  beforeDestroy() {
+    ipcRenderer.removeListener("productByCode", this.onProductRecived);
+    window.removeEventListener("paste", this.requestProductByCode);
   }
 };
 </script>
@@ -119,12 +172,14 @@ th {
   overflow: hidden;
   font-weight: bold;
   font-size: 2vw;
+  background-color: rgb(194, 194, 194);
+  color: black;
   border: 3px solid black;
   text-align: center;
 }
 
 .col1 {
-  width: 16%;
+  width: 28%;
 }
 .col3 {
   width: 16%;

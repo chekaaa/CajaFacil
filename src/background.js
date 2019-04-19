@@ -40,9 +40,11 @@ function createWindow() {
 }
 
 //Sql stuff
+import { getProductByCode } from "./database/database.js";
 
-import { CreateDatabase } from "./database/database.js";
-
+ipcMain.on("getProductByCode", (event, code) => {
+  getProductByCode(event.sender, code);
+});
 //Testin send and recive IPC between VUE and electron using the example database
 
 // Quit when all windows are closed.
