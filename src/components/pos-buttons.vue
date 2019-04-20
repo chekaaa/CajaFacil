@@ -1,15 +1,36 @@
 <template>
   <div class="buttons-container">
     <ul>
-      <li id="confirm">Confirmar</li>
-      <li id="cancel">Cancelar</li>
+      <li id="confirm" @click="confirmSale()">Confirmar</li>
+      <li id="cancel" @click="cancelSale()">Cancelar</li>
     </ul>
   </div>
 </template>
 
 <script>
+import { ipcRenderer } from "electron";
+import { constants } from "crypto";
+
 export default {
-  name: "pos-buttons"
+  name: "pos-buttons",
+  methods: {
+    cancelSale: function(e) {
+      this.$store.dispatch("clearSale");
+    },
+    confirmSale: function(e) {
+      this.$store.dispatch("commitSale");
+    },
+    onSaleDone: function(event, data) {
+      this.$store.dispatch("clearSale");
+      alert("Venta realizada con exito");
+    }
+  },
+  mounted() {
+    ipcRenderer.on("onSaleDone", this.onSaleDone);
+  },
+  beforeDestroy() {
+    ipcRenderer.removeListener("onSaleDone", this.onSaleDone);
+  }
 };
 </script>
 

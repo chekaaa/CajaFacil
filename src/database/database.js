@@ -33,6 +33,23 @@ export function getProductByCode(sender, code) {
   });
 }
 
+export function commitSale(sender, productList) {
+  db.serialize(function() {
+    db = new sqlite3.Database(dbPath);
+    var stmt = db.prepare(
+      "UPDATE producto SET cantidad_prod = cantidad_prod - ? WHERE id_prod = ?"
+    );
+    productList.forEach(product => {
+      stmt.run(product.quantity, product.id);
+    });
+    stmt.finalize();
+  });
+
+  db.close();
+
+  sender.send("onSaleDone", null);
+}
+
 // export function GetProductName(event) {
 //   db = new sqlite3.Database(dbPath);
 //   db.serialize(function() {

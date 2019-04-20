@@ -42,10 +42,14 @@ function createWindow() {
 }
 
 //Sql stuff
-import { getProductByCode } from "./database/database.js";
+import { getProductByCode, commitSale } from "./database/database.js";
 
 ipcMain.on("getProductByCode", (event, code) => {
   getProductByCode(event.sender, code);
+});
+
+ipcMain.on("onCommitSale", (event, productList) => {
+  commitSale(event.sender, productList);
 });
 
 ipcMain.on("showWindowtFunction", function(e, data) {

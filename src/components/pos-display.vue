@@ -19,7 +19,7 @@
     <div class="total-container">
       <h2>Total:</h2>
       <div class="total-output">
-        <h3>${{total}}</h3>
+        <h3>{{totalPrice}}</h3>
       </div>
     </div>
   </div>
@@ -30,17 +30,6 @@ import { ipcRenderer } from "electron";
 
 export default {
   name: "pos-display",
-  data() {
-    return {
-      codigo: "1234"
-    };
-  },
-  data() {
-    return {
-      productList: [],
-      total: 0
-    };
-  },
   methods: {
     onPaste(evt) {
       console.log("on paste", evt);
@@ -56,50 +45,25 @@ export default {
         );
       }
     },
-    cancelSale: function() {
-      this.productList = [];
+    pushProduct: function(event, arg) {
+      this.$store.dispatch("onProductRecived", arg);
+    }
+  },
+  computed: {
+    totalPrice() {
+      return this.$store.getters.calculatedTotal;
     },
-    onProductRecived: function(event, arg) {
-      if (arg != null) {
-        let objIndex = this.productList.findIndex(
-          obj => obj.id === arg.id_prod
-        );
-        console.log("ObjIndex: " + objIndex);
-        if (objIndex !== -1) {
-          this.productList[objIndex].quantity++;
-          this.productList[objIndex].subtotal =
-            this.productList[objIndex].quantity * arg.precio_prod;
-        } else {
-          this.productList.push({
-            id: arg.id_prod,
-            code: arg.cod_ucc14,
-            name: arg.nombre_prod,
-            quantity: 1,
-            subtotal: arg.precio_prod
-          });
-        }
-
-        //calculate new total
-        this.calculateTotal();
-      } else {
-        console.log("Produc not found");
-      }
-    },
-    calculateTotal: function() {
-      let tempTotal = 0;
-      this.productList.forEach(product => {
-        tempTotal += product.subtotal;
-      });
-      this.total = tempTotal;
+    productList() {
+      return this.$store.getters.getProductList;
     }
   },
   mounted() {
     window.addEventListener("paste", this.requestProductByCode);
 
-    ipcRenderer.on("productByCode", this.onProductRecived);
+    ipcRenderer.on("productByCode", this.pushProduct);
   },
   beforeDestroy() {
-    ipcRenderer.removeListener("productByCode", this.onProductRecived);
+    ipcRenderer.removeListener("productByCode", this.pushProduct);
     window.removeEventListener("paste", this.requestProductByCode);
   }
 };
