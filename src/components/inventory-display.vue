@@ -8,26 +8,65 @@
           <th class="col3">Precio unitario</th>
           <th class="col4">Total</th>
         </tr>
-        <tr>
-          <td>Caja de zapatos</td>
-          <td>2</td>
-          <td>$25000</td>
-          <td>$50000</td>
+        <tr v-for="product in productList" :key="product.id">
+          <td>{{product.name}}</td>
+          <td>{{product.stock}}</td>
+          <td>${{product.price}}</td>
+          <td>${{product.totalPrice}}</td>
         </tr>
       </table>
     </div>
     <div class="total-container">
       <h2>Valor total en productos:</h2>
       <div class="total-output">
-        <h3>$5000</h3>
+        <h3>{{totalMoney}}</h3>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { ipcRenderer } from "electron";
+
 export default {
-  name: "pos-display"
+  name: "pos-display",
+  data() {
+    return {
+      filterCode: null,
+      productList: []
+    };
+  },
+  methods: {
+    updateProductList: function(e, _productList) {
+      this.productList = [];
+      if (_productList === null) return;
+      _productList.forEach(product => {
+        this.productList.push({
+          id: product.id_prod,
+          name: product.nombre_prod,
+          stock: product.cantidad_prod,
+          price: product.precio_prod,
+          totalPrice: product.precio_prod * product.cantidad_prod
+        });
+      });
+    }
+  },
+  computed: {
+    totalMoney() {
+      let money = 0;
+      this.productList.forEach(product => {
+        money += product.totalPrice;
+      });
+      return "$" + money;
+    }
+  },
+  mounted() {
+    ipcRenderer.send("onInventoryRequest", null);
+    ipcRenderer.on("productListSent", this.updateProductList);
+  },
+  beforeDestroy() {
+    ipcRenderer.removeListener("productListSent", this.updateProductList);
+  }
 };
 </script>
 

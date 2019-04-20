@@ -1,15 +1,37 @@
 <template>
   <div class="filter-bar">
-    <div class="bar-title">Busqueda por codigo:</div>
-    <input type="number" pattern="\d*" name="codeInput" id="codeInput" min="0">
-    <a>Buscar</a>
-    <a id="resetButton">Resetear filtros</a>
+    <div class="bar-title">Busqueda por nombre:</div>
+    <input v-model="filter" type="text" pattern="\d*" name="codeInput" id="codeInput">
+    <a @click="updateInventoryListWithFilter()">Buscar</a>
+    <a @click="resetFilter()" id="resetButton">Resetear filtros</a>
   </div>
 </template>
 
 <script>
+import { ipcRenderer } from "electron";
+
 export default {
-  name: "inventoryFilterBar"
+  name: "inventoryFilterBar",
+  data() {
+    return {
+      filter: ""
+    };
+  },
+  methods: {
+    updateInventoryListWithFilter: function(e) {
+      let filterData;
+      if (filterData === "") {
+        filterData = null;
+      } else {
+        filterData = this.filter;
+      }
+      ipcRenderer.send("onInventoryRequest", filterData);
+    },
+    resetFilter: function() {
+      this.filter = "";
+      ipcRenderer.send("onInventoryRequest", null);
+    }
+  }
 };
 </script>
 
@@ -34,7 +56,7 @@ export default {
 }
 
 .filter-bar .bar-title {
-  font-size: 3.5vh;
+  font-size: 3vh;
   font-weight: bolder;
 }
 

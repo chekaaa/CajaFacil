@@ -20,8 +20,9 @@ function createWindow() {
   win = new BrowserWindow({
     width: 800,
     height: 600,
-    minWidth: 600,
-    minHeight: 600
+    minWidth: 1024,
+    minHeight: 720,
+    show: false
   });
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -30,10 +31,12 @@ function createWindow() {
     if (!process.env.IS_TEST) win.webContents.openDevTools();
   } else {
     createProtocol("app");
+    win.setMenu(null);
     // Load the index.html when not in development
     win.loadURL("app://./index.html");
   }
-
+  win.maximize();
+  win.show();
   win.on("closed", () => {
     win = null;
   });
@@ -42,7 +45,11 @@ function createWindow() {
 }
 
 //Sql stuff
-import { getProductByCode, commitSale } from "./database/database.js";
+import {
+  getProductByCode,
+  commitSale,
+  getProductList
+} from "./database/database.js";
 
 ipcMain.on("getProductByCode", (event, code) => {
   getProductByCode(event.sender, code);
@@ -50,6 +57,10 @@ ipcMain.on("getProductByCode", (event, code) => {
 
 ipcMain.on("onCommitSale", (event, productList) => {
   commitSale(event.sender, productList);
+});
+
+ipcMain.on("onInventoryRequest", (event, name) => {
+  getProductList(event.sender, name);
 });
 
 ipcMain.on("showWindowtFunction", function(e, data) {

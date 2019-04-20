@@ -1,15 +1,14 @@
-import { app } from "electron";
+import { app, ipcMain } from "electron";
 var sqlite3 = require("sqlite3").verbose();
 const path = require("path");
-const dbPath = path.join(app.getAppPath("userData"), "markertdb.sqlite3");
+let dbPath = path.resolve(process.resourcesPath, "markertdb.sqlite3");
 let db = new sqlite3.Database(dbPath);
-//import { ipcMain } from "electron";
-console.log(dbPath);
+//mport { ipcMain } from "electron";
 
 db.serialize(function() {
   db.run(
     "CREATE TABLE IF NOT EXISTS producto " +
-      "(id_prod INTEGER PRIMARY KEY AUTOINCREMENT,cod_ucc14	INTEGER,nombre_prod	TEXT,descripcion	TEXT,cantidad_prod	INTEGER)"
+      "(id_prod INTEGER PRIMARY KEY AUTOINCREMENT,cod_ucc14	INTEGER,nombre_prod	TEXT,descripcion	TEXT,cantidad_prod	INTEGER,precio_prod	INTEGER)"
   );
 });
 
@@ -48,6 +47,23 @@ export function commitSale(sender, productList) {
   db.close();
 
   sender.send("onSaleDone", null);
+}
+
+export function getProductList(sender, name) {
+  db.serialize(function() {
+    db = new sqlite3.Database(dbPath);
+    let query = "SELECT * FROM producto";
+    if (name !== null) {
+      query += " WHERE lower(nombre_prod) LIKE '%" + name.toLowerCase() + "%'";
+    }
+    console.log(query);
+
+    db.all(query, function(err, rows) {
+      sender.send("productListSent", rows);
+    });
+  });
+
+  db.close();
 }
 
 // export function GetProductName(event) {
