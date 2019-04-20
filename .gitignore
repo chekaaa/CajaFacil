@@ -22,4 +22,3 @@ yarn-error.log*
 
 #Electron-builder output
 /dist_electron
-!/dist_electron/caja-facil Setup*.exe
