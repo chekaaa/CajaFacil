@@ -1,12 +1,31 @@
 <template>
-  <div>
-    <h1>This is a the inventory view</h1>
+  <div class="inventory-container">
+    <inventoryFilterBar/>
+    <inventoryDisplay/>
   </div>
 </template>
 
 <script>
+import inventoryFilterBar from "@/components/inventory-filterBar.vue";
+import inventoryDisplay from "@/components/inventory-display.vue";
+
 export default {
-  name: "Inventory"
+  name: "Inventory",
+  components: {
+    inventoryFilterBar,
+    inventoryDisplay
+  }
 };
 </script>
+
+<style scoped>
+.inventory-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  border: 4px solid black;
+  border-collapse: collapse;
+}
+</style>
+
 

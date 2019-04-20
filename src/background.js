@@ -37,6 +37,8 @@ function createWindow() {
   win.on("closed", () => {
     win = null;
   });
+
+  console.log(process.env.WEBPACK_DEV_SERVER_URL);
 }
 
 //Sql stuff
@@ -44,6 +46,22 @@ import { getProductByCode } from "./database/database.js";
 
 ipcMain.on("getProductByCode", (event, code) => {
   getProductByCode(event.sender, code);
+});
+
+ipcMain.on("showWindowtFunction", function(e, data) {
+  const modalPath =
+    process.env.NODE_ENV === "development"
+      ? process.env.WEBPACK_DEV_SERVER_URL
+      : `file://${__dirname}/index.html`;
+  let win = new BrowserWindow({
+    width: 400,
+    height: 320,
+    webPreferences: { webSecurity: false }
+  });
+  win.on("close", function() {
+    win = null;
+  });
+  win.loadURL(modalPath);
 });
 //Testin send and recive IPC between VUE and electron using the example database
 

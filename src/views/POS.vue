@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="pos-container">
     <posDisplay/>
     <posButtons/>
   </div>
@@ -18,8 +18,8 @@ export default {
 };
 </script>
 
-<style scoped>
-.container {
+<style>
+.pos-container {
   flex-grow: 1;
   display: flex;
 }
