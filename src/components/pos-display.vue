@@ -73,7 +73,8 @@ export default {
 .display-container {
   flex: 3;
   background-color: #dedede;
-  border: 4px solid black;
+  border: 2px solid black;
+  border-collapse: collapse;
   display: flex;
   flex-direction: column;
 }
@@ -83,7 +84,8 @@ export default {
   flex-grow: 1;
   margin: 5%;
   margin-bottom: 1%;
-  border: 4px solid black;
+  /* border: 2px solid black; */
+  border-collapse: collapse;
   box-sizing: border-box;
   overflow-y: scroll;
 }
@@ -138,7 +140,8 @@ th {
   font-size: 2vw;
   background-color: rgb(194, 194, 194);
   color: black;
-  border: 3px solid black;
+  border: 2px solid black;
+  border-collapse: collapse;
   text-align: center;
 }
 

@@ -49,7 +49,8 @@ export default {
   flex-grow: 1;
   margin: 5%;
   margin-bottom: 2%;
-  border: 4px solid black;
+  /* border: 2px solid black; */
+  border-collapse: collapse;
   box-sizing: border-box;
   overflow-y: scroll;
 }

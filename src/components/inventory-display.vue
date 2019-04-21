@@ -84,14 +84,15 @@ export default {
   flex-grow: 1;
   margin: 5%;
   margin-bottom: 1%;
-  border: 4px solid black;
+  /* border: 2px solid black; */
+  border-collapse: collapse;
   box-sizing: border-box;
   overflow-y: scroll;
 }
 
 .total-container {
   flex-basis: 9%;
-  padding: 1%;
+  padding: 0.3%;
   padding-right: 10%;
   margin-bottom: 1%;
   box-sizing: border-box;

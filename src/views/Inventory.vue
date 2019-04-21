@@ -23,7 +23,7 @@ export default {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  border: 4px solid black;
+  border: 2px solid black;
   border-collapse: collapse;
 }
 </style>

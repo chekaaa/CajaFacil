@@ -39,7 +39,8 @@ export default {
   flex: 1;
   display: flex;
   background-color: #cfcfcf;
-  border: 4px solid black;
+  border: 2px solid black;
+  border-collapse: collapse;
   border-left: 0px;
 }
 ul {
@@ -59,8 +60,8 @@ li {
   text-align: center;
   box-shadow: none;
   font-size: 3vw;
-
-  border: 4px solid black;
+  box-shadow: 0px 4px 6px 2px rgb(133, 133, 133);
+  /* border: 4px solid black; */
 }
 
 #confirm {
